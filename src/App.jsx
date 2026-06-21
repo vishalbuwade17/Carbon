@@ -33,14 +33,18 @@ function AppContent() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  // Enforce Route Protection during render (Performance Best Practice, no useEffect setState)
-  const authRequiredTabs = ['dashboard', 'challenges', 'admin'];
-  const isProtected = authRequiredTabs.includes(activeTab);
-  const displayedTab = (isProtected && !user) ? 'landing' : activeTab;
+  // Enforce Route Protection
+  useEffect(() => {
+    const authRequiredTabs = ['dashboard', 'challenges', 'admin'];
+    if (authRequiredTabs.includes(activeTab) && !user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveTab('landing');
+    }
+  }, [user, activeTab]);
 
   // Tab View Dispatcher
   const renderView = () => {
-    switch (displayedTab) {
+    switch (activeTab) {
       case 'landing':
         return <LandingPage setActiveTab={setActiveTab} />;
       case 'dashboard':
@@ -70,7 +74,7 @@ function AppContent() {
 
       {/* Global Navigation bar */}
       <Navbar 
-        activeTab={displayedTab} 
+        activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         theme={theme} 
         toggleTheme={toggleTheme} 

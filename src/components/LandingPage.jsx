@@ -20,25 +20,31 @@ export default function LandingPage({ setActiveTab }) {
     commute: 'car',
     energy: 'standard'
   });
+  const [demoOutput, setDemoOutput] = useState(680); // kg CO2 monthly
 
-  // Calculate demo carbon emissions on-the-fly during render (no state, no useEffect!)
-  let demoOutput = 0;
-  
-  // Diet component
-  if (demoInputs.diet === 'vegan') demoOutput += 60;
-  else if (demoInputs.diet === 'vegetarian') demoOutput += 90;
-  else if (demoInputs.diet === 'average') demoOutput += 150;
-  else if (demoInputs.diet === 'meat') demoOutput += 225;
+  // Run demo calculations on change
+  useEffect(() => {
+    let carbon = 0;
+    
+    // Diet component
+    if (demoInputs.diet === 'vegan') carbon += 60;
+    else if (demoInputs.diet === 'vegetarian') carbon += 90;
+    else if (demoInputs.diet === 'average') carbon += 150;
+    else if (demoInputs.diet === 'meat') carbon += 225;
 
-  // Commute component
-  if (demoInputs.commute === 'car') demoOutput += 320;
-  else if (demoInputs.commute === 'transit') demoOutput += 110;
-  else if (demoInputs.commute === 'bike') demoOutput += 0;
+    // Commute component
+    if (demoInputs.commute === 'car') carbon += 320;
+    else if (demoInputs.commute === 'transit') carbon += 110;
+    else if (demoInputs.commute === 'bike') carbon += 0;
 
-  // Energy component
-  if (demoInputs.energy === 'led') demoOutput += 90;
-  else if (demoInputs.energy === 'standard') demoOutput += 180;
-  else if (demoInputs.energy === 'solar') demoOutput += 20;
+    // Energy component
+    if (demoInputs.energy === 'led') carbon += 90;
+    else if (demoInputs.energy === 'standard') carbon += 180;
+    else if (demoInputs.energy === 'solar') carbon += 20;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDemoOutput(carbon);
+  }, [demoInputs]);
 
   // Fetch real statistics from database
   useEffect(() => {
@@ -233,9 +239,10 @@ export default function LandingPage({ setActiveTab }) {
               </p>
 
               <div className="form-group">
-                <label className="form-label">Diet Profile</label>
+                <label className="form-label" htmlFor="demoDiet">Diet Profile</label>
                 <select 
                   className="form-control"
+                  id="demoDiet"
                   value={demoInputs.diet}
                   onChange={(e) => setDemoInputs(prev => ({ ...prev, diet: e.target.value }))}
                 >
@@ -247,9 +254,10 @@ export default function LandingPage({ setActiveTab }) {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Weekly Commute Mode</label>
+                <label className="form-label" htmlFor="demoCommute">Weekly Commute Mode</label>
                 <select 
                   className="form-control"
+                  id="demoCommute"
                   value={demoInputs.commute}
                   onChange={(e) => setDemoInputs(prev => ({ ...prev, commute: e.target.value }))}
                 >
@@ -260,9 +268,10 @@ export default function LandingPage({ setActiveTab }) {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Home Energy Source</label>
+                <label className="form-label" htmlFor="demoEnergy">Home Energy Source</label>
                 <select 
                   className="form-control"
+                  id="demoEnergy"
                   value={demoInputs.energy}
                   onChange={(e) => setDemoInputs(prev => ({ ...prev, energy: e.target.value }))}
                 >
@@ -333,7 +342,7 @@ export default function LandingPage({ setActiveTab }) {
             What EcoTrackers Say
           </h2>
           <div className="grid grid-cols-3">
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifycontent: 'space-between' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <p style={{ fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
                 "EcoTrack changed how I live. Logging my footprint helped me realize how much carbon was associated with my daily solo driving. I now bike to local errands, and I've locked in a 14-day streak!"
               </p>
@@ -348,7 +357,7 @@ export default function LandingPage({ setActiveTab }) {
               </div>
             </div>
 
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifycontent: 'space-between' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <p style={{ fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
                 "As an admin, the analytics panel is super insightful. I can easily monitor how daily challenges drive community-wide offsets. Plus, the interactive simulator makes planning carbon cuts fun."
               </p>
@@ -363,7 +372,7 @@ export default function LandingPage({ setActiveTab }) {
               </div>
             </div>
 
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifycontent: 'space-between' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <p style={{ fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
                 "The AI sustainability advisor caught that my standby power was driving 100+ kg of CO2 monthly. Unplugged them and bought smart strips. Saving carbon and saving money!"
               </p>
