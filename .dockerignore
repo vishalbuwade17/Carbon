@@ -1,0 +1,8 @@
+node_modules
+dist
+ecotrack.db
+.git
+.env
+npm-debug.log*
+*.sqlite
+*.db
