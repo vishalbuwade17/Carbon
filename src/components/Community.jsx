@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Activity, TreePine, CarFront, Award, Flame, Users, Sparkles } from 'lucide-react';
 

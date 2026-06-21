@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 
 const AuthContext = createContext(null);
 
@@ -7,6 +7,16 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('ecotrack_token') || null);
   const [loading, setLoading] = useState(true);
   const [authModal, setAuthModal] = useState({ isOpen: false, tab: 'login' });
+
+  const logout = () => {
+    localStorage.removeItem('ecotrack_token');
+    setToken(null);
+    setUser(null);
+  };
+
+  const closeAuthModal = () => {
+    setAuthModal({ isOpen: false, tab: 'login' });
+  };
 
   // Fetch current user details on boot if token exists
   useEffect(() => {
@@ -94,18 +104,8 @@ export function AuthProvider({ children }) {
     return data.user;
   };
 
-  const logout = () => {
-    localStorage.removeItem('ecotrack_token');
-    setToken(null);
-    setUser(null);
-  };
-
   const openAuthModal = (tab = 'login') => {
     setAuthModal({ isOpen: true, tab });
-  };
-
-  const closeAuthModal = () => {
-    setAuthModal({ isOpen: false, tab: 'login' });
   };
 
   const updateUserLocal = (updatedFields) => {

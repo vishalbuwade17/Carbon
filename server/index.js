@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import compression from 'compression';
 import { getDb } from './db.js';
 import { seedDb } from './seed.js';
 
@@ -26,6 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
@@ -48,7 +50,7 @@ app.get('/api/health', (req, res) => {
 const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('--production');
 if (isProduction) {
   const distPath = path.resolve(__dirname, '../dist');
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, { maxAge: '1d' }));
   
   // React fallback router
   app.get('*', (req, res, next) => {

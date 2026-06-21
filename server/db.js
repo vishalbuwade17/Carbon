@@ -121,4 +121,9 @@ async function initializeSchema(db) {
       image_url TEXT
     )
   `);
+
+  // Create indexes for query optimization (Efficiency pillar)
+  await db.exec('CREATE INDEX IF NOT EXISTS idx_carbon_logs_user_id ON carbon_logs(user_id)');
+  await db.exec('CREATE INDEX IF NOT EXISTS idx_user_challenges_user_id ON user_challenges(user_id)');
+  await db.exec('CREATE INDEX IF NOT EXISTS idx_user_badges_user_id ON user_badges(user_id)');
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
@@ -33,17 +33,14 @@ function AppContent() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  // Enforce Route Protection
-  useEffect(() => {
-    const authRequiredTabs = ['dashboard', 'challenges', 'admin'];
-    if (authRequiredTabs.includes(activeTab) && !user) {
-      setActiveTab('landing');
-    }
-  }, [user, activeTab]);
+  // Enforce Route Protection during render (Performance Best Practice, no useEffect setState)
+  const authRequiredTabs = ['dashboard', 'challenges', 'admin'];
+  const isProtected = authRequiredTabs.includes(activeTab);
+  const displayedTab = (isProtected && !user) ? 'landing' : activeTab;
 
   // Tab View Dispatcher
   const renderView = () => {
-    switch (activeTab) {
+    switch (displayedTab) {
       case 'landing':
         return <LandingPage setActiveTab={setActiveTab} />;
       case 'dashboard':
@@ -73,7 +70,7 @@ function AppContent() {
 
       {/* Global Navigation bar */}
       <Navbar 
-        activeTab={activeTab} 
+        activeTab={displayedTab} 
         setActiveTab={setActiveTab} 
         theme={theme} 
         toggleTheme={toggleTheme} 

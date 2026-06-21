@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Clock, Heart, Share2, Compass, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Clock, AlertCircle, ArrowLeft } from 'lucide-react';
 
 export default function Education() {
   const { token } = useAuth();

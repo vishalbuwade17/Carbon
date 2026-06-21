@@ -1,6 +1,5 @@
 import { getDb } from '../server/db.js';
 import { seedDb } from '../server/seed.js';
-import express from 'express';
 
 // Let's write a self-contained node script that spins up the db and runs basic queries
 async function runTests() {

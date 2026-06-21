@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { Leaf, Info, Zap, Bike, ShieldAlert, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Info, Zap } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 
 export default function Simulator() {
-  const { user } = useAuth();
-  
   // Simulation Inputs (Percentage shifts)
   const [commuteShift, setCommuteShift] = useState(0); // 0% to 100% reduction in driving
   const [dietShift, setDietShift] = useState(0);    // 0% to 100% shift to plant-based meals
@@ -18,38 +15,26 @@ export default function Simulator() {
   const baselineOther = 80;
   const baselineTotal = baselineTransport + baselineElectricity + baselineDiet + baselineOther; // 1000 kg
 
-  // Simulated Outputs
-  const [simulated, setSimulated] = useState({
-    transportation: baselineTransport,
-    electricity: baselineElectricity,
-    food: baselineDiet,
-    other: baselineOther,
-    total: baselineTotal,
-    savedMonthly: 0,
-    savedYearly: 0
-  });
+  // Calculate simulated outputs on-the-fly during render (Performance Best Practice)
+  const tNew = Math.max(0, baselineTransport * (1 - commuteShift / 100));
+  const eNew = Math.max(0, baselineElectricity * (1 - energyShift / 100));
+  // Plant-based diet cuts emissions from 180kg baseline down to 60kg (vegan target)
+  const dNew = Math.max(60, baselineDiet - (baselineDiet - 60) * (dietShift / 100));
+  const oNew = baselineOther;
+  
+  const newTotal = tNew + eNew + dNew + oNew;
+  const savedMonthly = baselineTotal - newTotal;
+  const savedYearly = savedMonthly * 12;
 
-  useEffect(() => {
-    const tNew = Math.max(0, baselineTransport * (1 - commuteShift / 100));
-    const eNew = Math.max(0, baselineElectricity * (1 - energyShift / 100));
-    // Plant-based diet cuts emissions from 180kg baseline down to 60kg (vegan target)
-    const dNew = Math.max(60, baselineDiet - (baselineDiet - 60) * (dietShift / 100));
-    const oNew = baselineOther;
-    
-    const newTotal = tNew + eNew + dNew + oNew;
-    const savedMonthly = baselineTotal - newTotal;
-    const savedYearly = savedMonthly * 12;
-
-    setSimulated({
-      transportation: Math.round(tNew * 10) / 10,
-      electricity: Math.round(eNew * 10) / 10,
-      food: Math.round(dNew * 10) / 10,
-      other: oNew,
-      total: Math.round(newTotal * 10) / 10,
-      savedMonthly: Math.round(savedMonthly * 10) / 10,
-      savedYearly: Math.round(savedYearly * 10) / 10
-    });
-  }, [commuteShift, dietShift, energyShift]);
+  const simulated = {
+    transportation: Math.round(tNew * 10) / 10,
+    electricity: Math.round(eNew * 10) / 10,
+    food: Math.round(dNew * 10) / 10,
+    other: oNew,
+    total: Math.round(newTotal * 10) / 10,
+    savedMonthly: Math.round(savedMonthly * 10) / 10,
+    savedYearly: Math.round(savedYearly * 10) / 10
+  };
 
   // Chart data configuration
   const chartData = [

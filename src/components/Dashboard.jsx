@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
-  TrendingDown, TrendingUp, Zap, Award, Shield, Flame, 
-  HelpCircle, Compass, Cpu, CheckCircle2, ChevronRight 
+  Zap, Award, Shield, Flame, Compass, Cpu, ChevronRight, TrendingDown, TrendingUp 
 } from 'lucide-react';
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, 
-  BarChart, Bar, Cell, PieChart, Pie, Legend 
+  BarChart, Bar, Cell, PieChart, Pie 
 } from 'recharts';
 
 export default function Dashboard({ setActiveTab }) {

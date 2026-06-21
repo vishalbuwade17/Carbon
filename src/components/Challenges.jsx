@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
-  Award, Flame, Zap, CheckCircle2, Circle, Sparkles, 
+  Flame, CheckCircle2, Sparkles, 
   Trash2, Car, Lightbulb, Utensils, Droplet, Star 
 } from 'lucide-react';
 

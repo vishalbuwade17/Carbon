@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Leaf, Flame, Shield, Sun, Moon, LogOut, Menu, X, User } from 'lucide-react';
+import { Leaf, Flame, Sun, Moon, LogOut, Menu, X } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, theme, toggleTheme }) {
   const { user, openAuthModal, logout } = useAuth();

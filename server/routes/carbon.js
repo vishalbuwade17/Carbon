@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware.js';
 const router = express.Router();
 
 // Helper to calculate carbon footprint
-function calculateFootprint(inputs) {
+export function calculateFootprint(inputs) {
   const { carMiles, flightsCount, electricityKwh, dietType, waterGallons, wasteKg } = inputs;
   
   // Coefficients (kg CO2)

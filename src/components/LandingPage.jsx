@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
-  ArrowRight, ShieldCheck, Zap, Activity, Leaf, 
-  TrendingDown, Globe, Award, Bike, Flame, TreePine, CarFront 
+  ArrowRight, Activity, Leaf, TreePine, CarFront
 } from 'lucide-react';
 
 export default function LandingPage({ setActiveTab }) {
@@ -21,30 +20,25 @@ export default function LandingPage({ setActiveTab }) {
     commute: 'car',
     energy: 'standard'
   });
-  const [demoOutput, setDemoOutput] = useState(680); // kg CO2 monthly
 
-  // Run demo calculations on change
-  useEffect(() => {
-    let carbon = 0;
-    
-    // Diet component
-    if (demoInputs.diet === 'vegan') carbon += 60;
-    else if (demoInputs.diet === 'vegetarian') carbon += 90;
-    else if (demoInputs.diet === 'average') carbon += 150;
-    else if (demoInputs.diet === 'meat') carbon += 225;
+  // Calculate demo carbon emissions on-the-fly during render (no state, no useEffect!)
+  let demoOutput = 0;
+  
+  // Diet component
+  if (demoInputs.diet === 'vegan') demoOutput += 60;
+  else if (demoInputs.diet === 'vegetarian') demoOutput += 90;
+  else if (demoInputs.diet === 'average') demoOutput += 150;
+  else if (demoInputs.diet === 'meat') demoOutput += 225;
 
-    // Commute component
-    if (demoInputs.commute === 'car') carbon += 320;
-    else if (demoInputs.commute === 'transit') carbon += 110;
-    else if (demoInputs.commute === 'bike') carbon += 0;
+  // Commute component
+  if (demoInputs.commute === 'car') demoOutput += 320;
+  else if (demoInputs.commute === 'transit') demoOutput += 110;
+  else if (demoInputs.commute === 'bike') demoOutput += 0;
 
-    // Energy component
-    if (demoInputs.energy === 'led') carbon += 90;
-    else if (demoInputs.energy === 'standard') carbon += 180;
-    else if (demoInputs.energy === 'solar') carbon += 20;
-
-    setDemoOutput(carbon);
-  }, [demoInputs]);
+  // Energy component
+  if (demoInputs.energy === 'led') demoOutput += 90;
+  else if (demoInputs.energy === 'standard') demoOutput += 180;
+  else if (demoInputs.energy === 'solar') demoOutput += 20;
 
   // Fetch real statistics from database
   useEffect(() => {
