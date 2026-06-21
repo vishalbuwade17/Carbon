@@ -1,0 +1,4 @@
+/* Custom index.css wrapper for EcoTrack */
+@import './styles/variables.css';
+@import './styles/app.css';
+@import './styles/components.css';
